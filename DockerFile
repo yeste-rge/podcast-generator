@@ -1,4 +1,4 @@
-FROM ubantu:latest
+FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y \
     python3.10 \
@@ -12,3 +12,13 @@ COPY feed.py /usr/bin/feed.py
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENTRYPOINT ["python", "generate_feeds.py"]
